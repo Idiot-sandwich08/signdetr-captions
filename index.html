@@ -124,6 +124,63 @@
     width: 44%;
     opacity: 0.5;
   }
+  .hud {
+    position: absolute;
+    top: 16px; right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+  }
+  .hud .pulse-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: hudPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes hudPulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  .scanline {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    box-shadow: 0 0 14px 1px var(--accent);
+    opacity: 0.55;
+    animation: scan 3.2s linear infinite;
+  }
+  @keyframes scan {
+    0% { top: 6%; opacity: 0; }
+    10% { opacity: 0.55; }
+    90% { opacity: 0.55; }
+    100% { top: 92%; opacity: 0; }
+  }
+  .bbox {
+    position: absolute;
+    left: 26%; top: 10%;
+    width: 48%; height: 66%;
+    --bbox-color: var(--accent);
+  }
+  .bbox .corner {
+    position: absolute;
+    width: 16px; height: 16px;
+    border-color: var(--bbox-color);
+    transition: border-color 0.4s ease;
+    animation: bboxPulse 2s ease-in-out infinite;
+  }
+  .bbox .tl { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
+  .bbox .tr { top: 0; right: 0; border-top: 2px solid; border-right: 2px solid; }
+  .bbox .bl { bottom: 0; left: 0; border-bottom: 2px solid; border-left: 2px solid; }
+  .bbox .br { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+  @keyframes bboxPulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
   .caption-pill {
     position: absolute;
     left: 50%;
@@ -138,7 +195,15 @@
     border-radius: 8px;
     box-shadow: 0 0 24px -4px rgba(45,212,191,0.7);
     white-space: nowrap;
+    transition: background 0.4s ease, color 0.4s ease;
   }
+  .mockup-caption {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin: 20px 0 0;
+  }
+  .mockup-caption .accent { color: var(--accent); }
 
   /* ---- Sections ---- */
   main { width: 100%; max-width: 760px; margin-top: 96px; }
@@ -268,25 +333,59 @@
     <div class="sub">free &middot; Meet &amp; Zoom web &middot; <a href="https://github.com/Idiot-sandwich08/signdetr-captions">view source →</a></div>
 
     <div class="mockup-wrap">
-      <div class="call-frame">
+      <div class="call-frame" id="demo-frame">
         <div class="grid-dot"><span></span><span></span><span></span></div>
+        <div class="hud"><span class="pulse-dot"></span>tracking</div>
+        <div class="scanline"></div>
         <svg class="silhouette" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="34" r="18" fill="rgba(255,255,255,0.2)"/>
           <path d="M 15 95 Q 15 55 50 55 Q 85 55 85 95 Z" fill="rgba(255,255,255,0.2)"/>
         </svg>
-        <div class="caption-pill">hello · 92%</div>
+        <div class="bbox">
+          <span class="corner tl"></span>
+          <span class="corner tr"></span>
+          <span class="corner bl"></span>
+          <span class="corner br"></span>
+        </div>
+        <div class="caption-pill" id="demo-pill">hello · 92%</div>
       </div>
     </div>
+    <p class="mockup-caption">↳ live demo, cycling through all <span class="accent">5</span> trained signs</p>
   </header>
+
+  <script>
+    var DEMO_SIGNS = [
+      { label: "hello",    conf: 92, bg: "rgb(41,171,202)",  fg: "#04181c" },
+      { label: "iloveyou", conf: 88, bg: "rgb(240,172,95)",  fg: "#2b1a04" },
+      { label: "thankyou", conf: 95, bg: "rgb(131,193,103)", fg: "#0e2306" },
+      { label: "yes",      conf: 90, bg: "rgb(204,204,255)", fg: "#12123a" },
+      { label: "no",       conf: 87, bg: "rgb(0,128,128)",   fg: "#eafffb" }
+    ];
+    (function () {
+      var i = 0;
+      var pill = document.getElementById("demo-pill");
+      var frame = document.getElementById("demo-frame");
+      function cycle() {
+        var d = DEMO_SIGNS[i % DEMO_SIGNS.length];
+        pill.textContent = d.label + " · " + d.conf + "%";
+        pill.style.background = d.bg;
+        pill.style.color = d.fg;
+        frame.style.setProperty("--bbox-color", d.bg);
+        i++;
+      }
+      cycle();
+      setInterval(cycle, 2000);
+    })();
+  </script>
 
   <main>
     <section>
       <p class="section-label">what it is</p>
       <h2>Captions for sign language, right in your video call</h2>
       <div class="prose">
-        <p>Video calls are built around speech. If you communicate in American Sign Language, that leaves a real gap — hearing participants can't always follow what you're signing, and there's rarely someone available to interpret in the moment.</p>
-        <p><strong>SignDETR Captions</strong> is a small step toward closing that gap. It's a Chrome extension that watches the video tiles on a Google Meet or Zoom call and, using a custom-trained sign detection model, overlays a live caption the instant it recognizes a sign — no interpreter, no app switching, just a caption that appears where the signing is happening.</p>
-        <p>It's built on <strong>SignDETR</strong>, a <code>DETR</code>-style object detection model trained from scratch on real hand-sign footage and refined iteratively with more images and more signs over time. Everything runs on your own machine — no video ever leaves your computer.</p>
+        <p>Video calls are built around speech. If you communicate in American Sign Language, that leaves a real gap: hearing participants can't always follow what you're signing, and there's rarely someone available to interpret in the moment.</p>
+        <p><strong>SignDETR Captions</strong> is a small step toward closing that gap. It's a Chrome extension that watches the video tiles on a Google Meet or Zoom call and, using a custom-trained sign detection model, overlays a live caption the instant it recognizes a sign. No interpreter, no app switching, just a caption that appears where the signing is happening.</p>
+        <p>It's built on <strong>SignDETR</strong>, a <code>DETR</code>-style object detection model trained from scratch on real hand-sign footage and refined iteratively with more images and more signs over time. Everything runs on your own machine, and no video ever leaves your computer.</p>
       </div>
     </section>
 
