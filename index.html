@@ -4,149 +4,314 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SignDETR Captions</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 30 30%22><rect width=%2210%22 height=%2230%22 fill=%22%2329abca%22/><rect x=%2210%22 width=%2210%22 height=%2230%22 fill=%22%23f0ac5f%22/><rect x=%2220%22 width=%2210%22 height=%2230%22 fill=%22%2383c167%22/></svg>">
 <style>
   :root {
-    --bg: #f6f7fb;
+    --bg: #f7f7f5;
     --panel: #ffffff;
-    --panel-border: #e3e6ef;
-    --text: #1b1e2b;
-    --text-dim: #676c82;
+    --panel-border: #e6e5e0;
+    --text: #1b1e1c;
+    --text-dim: #62655f;
+    --accent: #1f8a72;
     --teal: #29abca;
     --orange: #f0ac5f;
     --green: #83c167;
-    --radius: 16px;
+    --radius: 18px;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     min-height: 100vh;
-    background:
-      radial-gradient(circle at 10% 0%, rgba(41,171,202,0.14) 0%, transparent 45%),
-      radial-gradient(circle at 90% 15%, rgba(240,172,95,0.16) 0%, transparent 45%),
-      radial-gradient(circle at 50% 100%, rgba(131,193,103,0.14) 0%, transparent 50%),
-      var(--bg);
+    background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 60px 20px 80px;
+    padding: 80px 24px 80px;
   }
-  header { text-align: center; max-width: 560px; }
-  h1 {
-    font-size: 40px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin: 0 0 12px;
-    background: linear-gradient(90deg, var(--teal), var(--orange) 55%, var(--green));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  }
-  p.lead {
-    font-size: 17px;
+
+  /* ---- Hero ---- */
+  header { text-align: center; max-width: 720px; }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--text-dim);
-    line-height: 1.5;
-    margin: 0 0 32px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    padding: 7px 16px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+  }
+  h1 {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 22px;
+    line-height: 1.05;
+    color: var(--text);
+  }
+  h1 span { color: var(--accent); }
+  p.lead {
+    font-size: 21px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin: 0 0 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .download-btn {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: var(--text);
+    background: var(--accent);
     color: #fff;
     text-decoration: none;
     font-weight: 700;
-    font-size: 16px;
-    padding: 14px 28px;
+    font-size: 18px;
+    padding: 18px 36px;
     border-radius: 999px;
-    box-shadow: 0 12px 30px -12px rgba(27,30,43,0.4);
-    transition: transform 0.15s ease;
+    box-shadow: 0 14px 34px -16px rgba(31,138,114,0.55);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
-  .download-btn:hover { transform: translateY(-2px); }
-  .version {
+  .download-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 38px -16px rgba(31,138,114,0.6); }
+  .sub { font-size: 14px; color: var(--text-dim); margin-top: 16px; }
+  .sub a { color: var(--text-dim); }
+
+  /* ---- Mockup ---- */
+  .mockup-wrap { margin: 64px 0 8px; }
+  .call-frame {
+    width: 460px;
+    max-width: 88vw;
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    background: #14171a;
+    box-shadow: 0 30px 60px -24px rgba(20,25,20,0.3);
+    border: 7px solid #0e1012;
+  }
+  .call-frame .grid-dot {
+    position: absolute;
+    top: 16px; left: 16px;
+    display: flex;
+    gap: 6px;
+  }
+  .call-frame .grid-dot span {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+  }
+  .silhouette {
+    position: absolute;
+    left: 50%; top: 54%;
+    transform: translate(-50%, -50%);
+    width: 44%;
+    opacity: 0.9;
+  }
+  .caption-pill {
+    position: absolute;
+    left: 50%;
+    bottom: 15%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 17px;
+    padding: 9px 22px;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px -6px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  }
+
+  /* ---- Sections ---- */
+  main { width: 100%; max-width: 760px; margin-top: 88px; }
+  section { margin-bottom: 64px; }
+  .section-label {
     font-size: 13px;
-    color: var(--text-dim);
-    margin-top: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin: 0 0 14px;
   }
-  main { width: 100%; max-width: 640px; margin-top: 56px; }
+  h2 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px;
+  }
+  .prose p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text-dim);
+    margin: 0 0 18px;
+  }
+  .prose strong { color: var(--text); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .steps .step {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 28px 22px;
+    text-align: center;
+  }
+  .steps .step .num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    color: #fff;
+    margin: 0 auto 16px;
+  }
+  .steps .step:nth-child(1) .num { background: var(--teal); }
+  .steps .step:nth-child(2) .num { background: var(--orange); }
+  .steps .step:nth-child(3) .num { background: var(--green); }
+  .steps .step h3 { font-size: 16px; margin: 0 0 8px; }
+  .steps .step p { font-size: 14px; color: var(--text-dim); margin: 0; line-height: 1.5; }
+
   .card {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: var(--radius);
-    padding: 28px 32px;
-    margin-bottom: 20px;
-    box-shadow: 0 16px 40px -28px rgba(30,40,80,0.18);
+    padding: 34px 38px;
   }
-  .card h2 {
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-dim);
-    margin: 0 0 16px;
-  }
-  ol { margin: 0; padding-left: 20px; line-height: 1.9; }
-  ol li { font-size: 15px; }
+  ol { margin: 0; padding-left: 22px; line-height: 2.1; }
+  ol li { font-size: 16px; }
   code {
-    background: #eef1f9;
-    padding: 2px 7px;
+    background: #f0f1ec;
+    padding: 3px 8px;
     border-radius: 6px;
-    font-size: 13.5px;
+    font-size: 14px;
   }
   .note {
     display: flex;
-    gap: 12px;
-    background: #fff7ed;
-    border: 1px solid #fbdca3;
-    border-radius: 12px;
-    padding: 16px 18px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #7a4a06;
+    gap: 14px;
+    background: #fdf6ec;
+    border: 1px solid #ecd7ab;
+    border-radius: 14px;
+    padding: 22px 24px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #6b4a12;
   }
   .note b { color: inherit; }
+  .note a { color: #6b4a12; }
+
   footer {
-    margin-top: 40px;
-    font-size: 13px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
     color: var(--text-dim);
   }
-  footer a { color: var(--teal); text-decoration: none; }
+  footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
   footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 42px; }
+    p.lead { font-size: 18px; }
+    .card { padding: 26px 22px; }
+    .steps { grid-template-columns: 1fr; }
+    main { margin-top: 64px; }
+    section { margin-bottom: 48px; }
+  }
 </style>
 </head>
 <body>
   <header>
-    <h1>SignDETR Captions</h1>
-    <p class="lead">A Chrome extension that overlays live ASL sign captions on Google Meet & Zoom, powered by a locally-trained SignDETR model.</p>
+    <span class="eyebrow"><span class="dot"></span> Open source &middot; runs locally</span>
+    <h1>Sign<span>DETR</span> Captions</h1>
+    <p class="lead">A Chrome extension that overlays live ASL sign captions on Google Meet &amp; Zoom, powered by a locally-trained SignDETR model.</p>
     <a class="download-btn" href="https://github.com/Idiot-sandwich08/signdetr-captions/releases/latest/download/signdetr-captions.zip" download>
       ⬇ Download extension (.zip)
     </a>
-    <div class="version">Free &middot; open source &middot; works on Google Meet & Zoom web</div>
+    <div class="sub">Free &middot; works on Google Meet &amp; Zoom web &middot; <a href="https://github.com/Idiot-sandwich08/signdetr-captions">view source</a></div>
+
+    <div class="mockup-wrap">
+      <div class="call-frame">
+        <div class="grid-dot"><span></span><span></span><span></span></div>
+        <svg class="silhouette" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="34" r="18" fill="rgba(255,255,255,0.18)"/>
+          <path d="M 15 95 Q 15 55 50 55 Q 85 55 85 95 Z" fill="rgba(255,255,255,0.18)"/>
+        </svg>
+        <div class="caption-pill">hello · 92%</div>
+      </div>
+    </div>
   </header>
 
   <main>
-    <div class="card">
-      <h2>Install</h2>
-      <ol>
-        <li>Unzip the download.</li>
-        <li>Open <code>chrome://extensions</code> in Chrome.</li>
-        <li>Turn on <b>Developer mode</b> (top right).</li>
-        <li>Click <b>Load unpacked</b> and select the unzipped folder.</li>
-        <li>Join a Google Meet or Zoom (web client) call and start signing — a caption pill appears under your video.</li>
-      </ol>
-    </div>
+    <section>
+      <p class="section-label">What it is</p>
+      <h2>Captions for sign language, right in your video call</h2>
+      <div class="prose">
+        <p>Video calls are built around speech. If you communicate in American Sign Language, that leaves a real gap — hearing participants can't always follow what you're signing, and there's rarely someone available to interpret in the moment.</p>
+        <p><strong>SignDETR Captions</strong> is a small step toward closing that gap. It's a Chrome extension that watches the video tiles on a Google Meet or Zoom call and, using a custom-trained sign detection model, overlays a live caption the instant it recognizes a sign — no interpreter, no app switching, just a caption pill that appears where the signing is happening.</p>
+        <p>It's built on <strong>SignDETR</strong>, a DETR-style object detection model trained from scratch on real hand-sign footage and refined iteratively with more images and more signs over time. Everything runs on your own machine — no video ever leaves your computer.</p>
+      </div>
+    </section>
 
-    <div class="card">
+    <section>
+      <p class="section-label">How it works</p>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Watch the call</h3>
+          <p>Grabs frames from any video tile on Meet or Zoom's web client.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Detect the sign</h3>
+          <p>Sends frames to your local SignDETR model for real-time inference.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>Show a caption</h3>
+          <p>Floats a caption pill under the video the moment a sign is recognized.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-label">Install</p>
+      <div class="card">
+        <ol>
+          <li>Unzip the download.</li>
+          <li>Open <code>chrome://extensions</code> in Chrome.</li>
+          <li>Turn on <b>Developer mode</b> (top right).</li>
+          <li>Click <b>Load unpacked</b> and select the unzipped folder.</li>
+          <li>Join a Google Meet or Zoom (web client) call and start signing.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section style="margin-bottom: 0;">
       <div class="note">
         <span>⚠️</span>
-        <span><b>Requires a local inference server.</b> This extension talks to a SignDETR model server running on your own machine at <code>localhost:8000</code>. You'll need to clone and run the <a href="https://github.com/nicknochnack/SignDETR" style="color:#7a4a06">SignDETR</a> project's server separately before captions will appear.</span>
+        <span><b>Requires a local inference server.</b> This extension talks to a SignDETR model server running on your own machine at <code>localhost:8000</code>. You'll need to clone and run the <a href="https://github.com/nicknochnack/SignDETR">SignDETR</a> project's server separately before captions will appear.</span>
       </div>
-    </div>
+    </section>
   </main>
 
   <footer>
-    <a href="https://github.com/Idiot-sandwich08/signdetr-captions">View source on GitHub</a>
+    <span>&copy; 2026</span>
+    <a href="https://github.com/Idiot-sandwich08/signdetr-captions">GitHub</a>
   </footer>
 </body>
 </html>
